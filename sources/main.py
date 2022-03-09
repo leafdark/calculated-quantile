@@ -31,7 +31,7 @@ class PoolCalculatorClass(Resource):
         args = poll_calculator_args.parse_args()
         res = calculate_quantile(args)
         if res.get("is_error"):
-            abort(404, message=res.get("msg"))
+            abort(500, message=res.get("msg"))
         return {"quantile": res.get("quantile"),
                 "pool_size": res.get("size_arr")}
 

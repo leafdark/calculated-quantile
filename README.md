@@ -1,4 +1,5 @@
 # Calculated quantile #
+I use flask restful to work my homework because it's small, quickly and easier to create api
 
 ### Specifications & requirements
 1. Language Python 3.9+
@@ -8,11 +9,13 @@
 ### Project structure
 ```
 homework
-|__main.py
-|__service.py
-|__validate.py
-|__test_pool.py
-|__test_quantile.py
+|__sources
+|    |__main.py
+|    |__service.py
+|    |__validate.py
+|__test
+|    |__test_pool.py
+|    |__test_quantile.py
 |__requirements.txt
 |__README.md
 |__pools_data.csv
@@ -29,7 +32,7 @@ pip install -r requirements.txt
 <li> run server:
 
 ``` 
-python main.py
+python sources/main.py
 ```
 
 <li> run test:

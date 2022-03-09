@@ -3,6 +3,7 @@ from tempfile import NamedTemporaryFile
 import shutil
 import csv
 import numpy as np
+from threading import Lock
 
 
 filename = "pools_data.csv"
@@ -12,13 +13,16 @@ POOL_VALUES = 'poolValues'
 SEPARATE_CHARACTER = '|'
 HEADERS = [POOL_ID, POOL_VALUES]
 LIMIT_USING_FUNCTION = 100
+lock = Lock()
 
 
 def update_or_create_pool(data):
     tempfile = NamedTemporaryFile(mode='w', delete=False)
     pool_values = data.get(POOL_VALUES)
     pool_values.sort()
+
     with open(filename, "r", newline='') as csvfile, tempfile:
+        lock.acquire()
         reader = csv.DictReader(csvfile, fieldnames=HEADERS)
         writer = csv.DictWriter(tempfile, fieldnames=HEADERS)
         is_updated = False
@@ -33,17 +37,20 @@ def update_or_create_pool(data):
                    POOL_VALUES: SEPARATE_CHARACTER.join(str(x) for x in pool_values)}
             writer.writerow(row)
     shutil.move(tempfile.name, filename)
+    lock.release()
     return is_updated
 
 
 def calculate_quantile(data):
     with open(filename, "r", newline='') as csvfile:
+        lock.acquire()
         reader = csv.DictReader(csvfile, fieldnames=HEADERS)
         pool_values = []
         for row in reader:
             if row[POOL_ID] == str(data.get(POOL_ID)):
                 pool_values = [int(x) for x in row[POOL_VALUES].split(SEPARATE_CHARACTER)]
                 break
+        lock.release()
         if not pool_values:
             return {
                 "is_error": True,

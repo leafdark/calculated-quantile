@@ -4,7 +4,7 @@ import requests
 BASE = "http://127.0.0.1:5000/"
 
 
-def test_add_pool_001():
+def test_add_pool_data_normal_success():
     data = {
         "poolId": 12346,
         "poolValues": [2, 3, 4, 5, 9, 7]
@@ -13,7 +13,7 @@ def test_add_pool_001():
     assert response.status_code == 200
 
 
-def test_add_pool_002():
+def test_update_pool_data_normal_success():
     data = {
         "poolId": 12346,
         "poolValues": [2, 3, 4, 5, 9, 7, 10]
@@ -22,7 +22,7 @@ def test_add_pool_002():
     assert response.status_code == 200
 
 
-def test_add_pool_003():
+def test_add_pool_pool_values_empty():
     data = {
         "poolId": 12346,
         "poolValues": []
@@ -31,7 +31,7 @@ def test_add_pool_003():
     assert response.status_code == 400
 
 
-def test_add_pool_004():
+def test_add_pool_not_pool_values():
     data = {
         "poolId": 12346,
     }
@@ -39,7 +39,7 @@ def test_add_pool_004():
     assert response.status_code == 400
 
 
-def test_add_pool_005():
+def test_add_pool_not_pool_id():
     data = {
         "poolValues": [2, 3]
     }
@@ -48,7 +48,7 @@ def test_add_pool_005():
     assert response.status_code == 400
 
 
-def test_add_pool_006():
+def test_add_pool_pool_id_is_string():
     data = {
         "poolId": 'abc',
         "poolValues": [2, 3, 5]
@@ -57,7 +57,7 @@ def test_add_pool_006():
     assert response.status_code == 400
 
 
-def test_add_pool_007():
+def test_add_pool_values_have_string():
     data = {
         "poolId": 123456,
         "poolValues": [2, 3, 5, 'a']
