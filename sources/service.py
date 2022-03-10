@@ -20,9 +20,8 @@ def update_or_create_pool(pool_id, pool_values):
     """
     tempfile = NamedTemporaryFile(mode='w', delete=False)
     pool_values.sort()
-
+    lock.acquire()
     with open(FILENAME, "r", newline='') as csvfile, tempfile:
-        lock.acquire()
         reader = csv.DictReader(csvfile, fieldnames=HEADERS)
         writer = csv.DictWriter(tempfile, fieldnames=HEADERS)
         is_updated = False
@@ -50,13 +49,11 @@ def calculate_quantile(pool_id, percentile):
     """
     pool_values = []
     with open(FILENAME, "r", newline='') as csvfile:
-        lock.acquire()
         reader = csv.DictReader(csvfile, fieldnames=HEADERS)
         for row in reader:
             if row[POOL_ID] == str(pool_id):
                 pool_values = [int(x) for x in row[POOL_VALUES].split(SEPARATE_CHARACTER)]
                 break
-        lock.release()
     if not pool_values:
         return {
             "is_error": True,
